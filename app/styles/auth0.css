@@ -1,0 +1,6 @@
+body .a0-bg-gradient .a0-avatar, body .a0-bg-gradient .a0-image { display: none; }
+body #a0-lock.a0-theme-default .a0-panel .a0-bg-gradient { background: #f9f9f9; border-bottom: 1px solid #efefef; opacity: 1; }
+body #a0-lock.a0-theme-default .a0-zocial.a0-github { background: #00a2de; color: #ffffff; }
+body #a0-lock.a0-theme-default .a0-zocial.a0-github:before { background: rgba(255,255,255,0.25); color: #000000; }
+body #a0-lock.a0-theme-default .a0-panel * { font-family: "Open Sans","Helvetica Neue",Helvetica,Arial,sans-serif; }
+body #a0-lock.a0-theme-default .a0-panel .a0-all, #a0-lock.a0-theme-default .a0-panel .a0-forgot-pass { color: #00a2de; }

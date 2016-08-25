@@ -1,0 +1,43 @@
+code {
+  color:#c7254e;
+  background-color:#f9f2f4;
+  border-radius:4px;
+}
+code,kbd {
+  padding:2px 4px;
+}
+pre {
+  display:block;
+  margin:0 0 10px;
+  word-break:break-all;
+  word-wrap:break-word;
+  color:#43433e;
+  background-color:#f7f7f7;
+  border:1px solid #cccccc;
+  border-radius:4px;
+  overflow:auto;
+  font-size:1em;
+  padding: 0 6px;
+  line-height:1.8em;
+}
+pre code {
+  padding:0;
+  font-size:inherit;
+  color:inherit;
+  white-space:pre-wrap;
+  background-color:transparent;
+  border-radius:0;
+}
+code,kbd {
+  font-size:1em;
+}
+code,kbd,pre,samp {
+  font-family:monospace,monospace;
+}
+p,pre {
+  margin-bottom:0;
+}
+pre,blockquote p {
+  font-size:1em;
+  margin: 6px 0 0;
+}
