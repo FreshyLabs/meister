@@ -6,21 +6,26 @@ import isEqual from 'lodash/isEqual';
 
 import Api       from '../lib/api';
 import config    from '../config';
-//import Header    from './header';
-//import Footer    from './footer';
-//import '../styles/index.css';
 
+import Header    from './header';
+import Footer    from './footer';
+import MountainList  from './mountain_list';
+import MountainDeets from './mountain_deets';
 
-const _actions: tActions = {
+import '../styles/index.css';
+
+const _actions = {
 
   // mountains
-
   fetchMountains() {
     return Api.get( '/mountains' );
   },
 
-  // users
+  updateMountain( name, data ){
+    return Api.put( '/mountains/' + name, data );
+  },
 
+  // users
   fetchUser() {
     return Api.get( '/user/current' );
   }
@@ -33,6 +38,7 @@ class Index extends React.Component {
     super( props );
     this.state = {
       mountains: [],
+      selectedMtn: null,
       user: null
     };
   }
@@ -44,7 +50,6 @@ class Index extends React.Component {
 
     _actions.fetchUser().then( user => {
       this.setState( { user } );
-      this.initConnection( user.container );
     } );
   }
 
@@ -52,21 +57,29 @@ class Index extends React.Component {
     return shallowCompare( this, ...args );
   }
 
-  //<Header { ...props } user={ this.state.user } />
-  //<Footer />
+  @autobind
+  changeMountain( name ) {
+    this.setState( { 
+      selectedMtn: this.state.mountains.find( mtn => mtn.name === name ) 
+    } );
+  }
+
+  updateMtn( name, model ) {
+    _actions.updateMountain( name, model );
+  }
 
   render () {
     const {
       props: { children, ...props },
     } = this;
 
+    const { selectedMtn } = this.state;
+
     return (
       <div>
-        { React.cloneElement( children, {
-          ...props,
-          ...this.state,
-          actions: _actions
-        } ) }
+        <Header { ...props } user={ this.state.user } />
+        <MountainList { ...props } mountain={ selectedMtn } mountains={ this.state.mountains } change={ this.changeMountain }/>
+        { selectedMtn && <MountainDeets { ...props } mountain={ selectedMtn } save={ this.updateMtn } /> }
       </div>
     );
   }

@@ -79,9 +79,10 @@ apiRouter.route( '/mountains/:id' )
 apiRouter.route( '/user/current' )
   .get( function getCurrentUser( req, res ) {
     let user = req.user && req.user.toJSON ? req.user.toJSON() : req.user;
-    if ( user && ~Users.indexOf( user.profile.nickname ) ) {
-      user = Object.assign( {}, user, { timbrion: true } );
+    if ( user && ~Users.indexOf( user.profile.username ) ) {
+      user = Object.assign( {}, user, { admin: true } );
     }
+    res.status( 200 ).send( user );
   });
 
 

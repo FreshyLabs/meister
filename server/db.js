@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 const jwt      = require( 'jsonwebtoken' );
 const mongoose = require( 'mongoose' );
+require('mongoose-function')(mongoose);
 
 const config             = require( './config' );
 
@@ -31,9 +32,11 @@ userSchema.pre( 'save', function setWasNew( next ) {
  */
 const mtnSchema = mongoose.Schema( {
   createdAt:    { type: Date, default: Date.now },
-  scraper:      String,
+  data:         mongoose.Schema.Types.Mixed,
   feature:      mongoose.Schema.Types.Mixed,
-  name:         String
+  name:         String,
+  scraperUrl:   String,
+  scraperFunc:  Function
 } );
 
 

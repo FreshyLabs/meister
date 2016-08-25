@@ -9,7 +9,7 @@ const entry = {
 };
 
 const plugins = [
-  new webpack.EnvironmentPlugin( [ 'NODE_ENV', 'TIMBR_WAMPIFY_HOST' ] ),
+  new webpack.EnvironmentPlugin( [ 'NODE_ENV' ] ),
   new webpack.optimize.CommonsChunkPlugin( 'common.js' )
 ];
 

@@ -29,6 +29,7 @@
     "pug": "^2.0.0-beta2",
     "react": "^15.1.0",
     "react-addons-shallow-compare": "^15.1.0",
+    "react-codemirror": "^0.2.6",
     "react-datepicker": "^0.27.0",
     "react-dom": "^15.1.0",
     "react-router": "^2.4.1",
