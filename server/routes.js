@@ -8,6 +8,8 @@ const config              = require( './config' );
 const db                  = require( './db' );
 const Users               = require( './users.json' );
 
+const Scraper = require('../lib/scraper');
+
 const apiRouter = express.Router();
 const json      = bodyParser.json( { limit: '50mb' } );
 
@@ -64,6 +66,20 @@ apiRouter.route( '/mountains' )
     }
   } );
 
+
+
+apiRouter.route( '/mountains/scraper' )
+  .post( function scraper( req, res ) {
+    Scraper( req.body.url, eval( "(" + req.body.func + ")"), ( err, result ) => {
+      if ( err ) {
+        console.log(err, req.body.url)
+        return res.status( 200 ).send( err );
+      }
+      res.status( 200 ).send( result );
+    } );
+  });
+ 
+
 apiRouter.route( '/mountains/:id' )
   .get( function getMtn( req, res ) {
     db.Mountain
@@ -71,8 +87,13 @@ apiRouter.route( '/mountains/:id' )
       .then( onSuccess( res ), onError( res ) );
   } )
   .put( function updateMtn( req, res ) {
-    // const Object.assign( req.kernel, req.body );
-    //req.kernel.save().then( onSuccess( res ), onError( res ) );
+    db.Mountain
+      .findOne( { name: req.params.id } ).exec()
+      .then( mtn => { 
+          const newMtn = Object.assign( mtn, req.body );
+          return newMtn.save(); 
+      })
+      .then( onSuccess( res ), onError( res ) );
     res.sendStatus( 200 );
   } )
 

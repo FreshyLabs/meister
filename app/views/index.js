@@ -21,14 +21,25 @@ const _actions = {
     return Api.get( '/mountains' );
   },
 
+  fetchMountain( name ) {
+    return Api.get( '/mountains/' + name );
+  },
+
   updateMountain( name, data ){
     return Api.put( '/mountains/' + name, data );
+  },
+
+  
+  testScraper( data ){
+    return Api.post( '/mountains/scraper', data );
   },
 
   // users
   fetchUser() {
     return Api.get( '/user/current' );
   }
+
+  
 
 };
 
@@ -39,7 +50,9 @@ class Index extends React.Component {
     this.state = {
       mountains: [],
       selectedMtn: null,
-      user: null
+      user: null,
+      searchTerm: '',
+      dirty: false
     };
   }
 
@@ -59,13 +72,32 @@ class Index extends React.Component {
 
   @autobind
   changeMountain( name ) {
-    this.setState( { 
-      selectedMtn: this.state.mountains.find( mtn => mtn.name === name ) 
-    } );
+    _actions.fetchMountain( name )
+      .then( mtn => {
+        this.setState( { 
+          selectedMtn: mtn,  
+          testResult: null
+        } );
+      });
   }
 
+  @autobind
   updateMtn( name, model ) {
-    _actions.updateMountain( name, model );
+    this.setState( { dirty: true })
+    _actions.updateMountain( name, model )
+      .then( () => this.setState( { dirty: false }) );
+  }
+
+  @autobind
+  testScraper( url, func ) {
+    _actions.testScraper( { url, func } ).then( testResult => {
+      this.setState( { testResult })
+    });
+  }
+
+  @autobind
+  search( e ) {
+    this.setState( { searchTerm: e.target.value } );
   }
 
   render () {
@@ -73,13 +105,13 @@ class Index extends React.Component {
       props: { children, ...props },
     } = this;
 
-    const { selectedMtn } = this.state;
+    const { selectedMtn, testResult, searchTerm, dirty } = this.state;
 
     return (
       <div>
         <Header { ...props } user={ this.state.user } />
-        <MountainList { ...props } mountain={ selectedMtn } mountains={ this.state.mountains } change={ this.changeMountain }/>
-        { selectedMtn && <MountainDeets { ...props } mountain={ selectedMtn } save={ this.updateMtn } /> }
+        <MountainList { ...props } term={ searchTerm } search={ this.search } mountain={ selectedMtn } mountains={ this.state.mountains } change={ this.changeMountain }/>
+        { selectedMtn && <MountainDeets { ...props } dirty={ dirty } save={this.updateMtn } testResult={ testResult } mountain={ selectedMtn } save={ this.updateMtn } testScraper={ this.testScraper } /> }
       </div>
     );
   }

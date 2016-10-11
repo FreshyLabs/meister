@@ -1,9 +1,12 @@
 import React from 'react';
 import autobind from 'autobind-decorator';
+        
+import Dropdown from 'react-dropdown'
 
 import Codemirror from 'react-codemirror';
 require('codemirror/mode/javascript/javascript');
 require('../../node_modules/codemirror/lib/codemirror.css');
+require('react-dropdown/style.css');
 
 @autobind
 class MountainDeets extends React.Component {
@@ -13,51 +16,70 @@ class MountainDeets extends React.Component {
     this.state = {
       scraperUrl: '',
       scraperFunc: '',
-      webcams: [],
+      webcams: [''],
       currentNew: 0,
       currentBase: 0,
-      currentStatus: ''
+      currentStatus: '',
+      dirty: false
     }
   }
 
+  componentDidMount(){
+    if ( this.props.mountain ) {
+      this._update( this.props );
+    }
+  }
+  
+
   componentWillReceiveProps( newProps ) {
     if ( newProps.mountain ) {
-      const { properties: data } = newProps.mountain.feature;
+      this._update( newProps );
+    }
+  }
+
+  _update( props ) {
+    if ( !props.testResult ) {
+      const { properties: data } = props.mountain.feature;
       this.setState({
-        scraperUrl: newProps.mountain.scraperUrl,
-        scraperFunc: newProps.mountain.scraperFunc,
+        scraperUrl: props.mountain.scraperUrl,
+        scraperFunc: props.mountain.scraperFunc,
         webcams: data.webcams,
         currentNew: data.current_new,
         currentBase: data.current_base,
-        currentStatus: data.current_status
+        currentStatus: data.current_status,
+        dirty: props.dirty
       });
     }
   }
 
   addCam() {
-    this.setState( { webcams: this.state.webcams.concat(['']) } );
+    this.setState( { webcams: this.state.webcams.concat(['']), dirty: true } );
   }
 
   updateCams( event, i ) {
     const webcams = [ ...this.state.webcams ];
-    webcams[ i ] = event.target.value
-    this.setState( { webcams } );
+    webcams[ i ] = event.target.value || '';
+    this.setState( { webcams: [ ...webcams.filter( w => w !== '') ], dirty: true } );
   }
   
   updateUrl( event ) {
-    this.setState( { scraperUrl: event.target.value } );
+    this.setState( { scraperUrl: event.target.value, dirty: true } );
   }
 
+  updateVal( name, value ) {
+    this.setState( { [ name ]: value, dirty: true } );
+  }
 
   updateCode( newCode ) {
-    this.setState({ scraperFunc: newCode });
+    this.setState({ scraperFunc: newCode, dirty: true });
   }
 
   test() {
-    console.log( this.state.scraperUrl );
+    const { scraperUrl, scraperFunc } = this.state;
+    this.props.testScraper( scraperUrl, scraperFunc );
   }
 
-  save() {
+  save( e ) {
     const mtn = { 
       ...this.props.mountain,
       scraperUrl: this.state.scraperUrl,
@@ -68,38 +90,62 @@ class MountainDeets extends React.Component {
           ...this.props.mountain.feature.properties,
           current_new: this.state.currentNew,
           current_base: this.state.currentBase,
-          currentStatus: this.state.currentStatus,
+          current_status: this.state.currentStatus,
           webcams: this.state.webcams 
         }
       }
     };
-    console.log('SAVE', this.props.mountain.name, mtn)
+    //console.log(mtn)
+    this.props.save( this.props.mountain.name, mtn );
   }
 
   render() {
+
+    const statusOpts = [ 'open', 'closed' ];
+
+    const { testResult } = this.props;
+    const { dirty, currentNew, currentBase, currentStatus } = this.state;
+
     return (
       <div className="col-xs-8 col-sm-8 col-lg-6 mtn-deets">
-        <h2>{ this.props.mountain.name }</h2>
-        <hr/>
+        <h2>{ this.props.mountain.name } <a className="btn btn-primary pull-right" href="#" onClick={ this.save }>{ dirty ? 'Save' : 'Saved' }</a></h2>
+
+        <div className="row">
+          <div className="col-xs-3 col-sm-3 col-lg-3">
+            <h3>New</h3>
+            <input name='new' onChange={ (e) => this.updateVal('currentNew', e.target.value ) } type="text" value={ currentNew} />
+          </div>
+          <div className="col-xs-3 col-sm-3 col-lg-3">
+            <h3>Base</h3>
+            <input name='new' onChange={ (e) => this.updateVal('currentBase', e.target.value ) } type="text" value={ currentBase} />
+          </div>
+          <div className="col-xs-3 col-sm-3 col-lg-3">
+            <h3>Status</h3>
+            <Dropdown options={ statusOpts } onChange={ v => this.updateVal('currentStatus', v.value ) } value={ currentStatus } placeholder="Select an status" />
+          </div>
+        </div>
+
         <h3>Webcams</h3>
         { this.state.webcams.map( ( cam, i) => {
             return <div key={i}>
-              <input 
-                name='cam' 
+              <input
+                name='cam'
                 onChange={ e => this.updateCams( e, i ) }
-                type="text" 
-                value={ cam } 
-                key={i}/> 
+                type="text"
+                value={ cam || '' }
+                key={i}
+                style={{ width: '90%', 'float': 'left' }}/>
+              <img src={ cam } width={ 50 } />
             </div>
-          }) 
+          })
         }
         <a className="btn btn-primary pull-right" href="#" onClick={ this.addCam }>Add</a>
+
         <h3>Scraper</h3>
-        <label name='url'>Scraper URL</label>
         <input name='url' onChange={ this.updateUrl } type="text" value={ this.state.scraperUrl } />
-        <Codemirror value={this.state.scraperFunc} onChange={this.updateCode} options={{mode: 'javascript'}} />
+        <Codemirror value={this.state.scraperFunc} onChange={this.updateCode} options={{mode: 'javascript'}} style={{height: 300}} />
+        { testResult && <div>{ typeof testResult === 'object' ? JSON.stringify( testResult ) : testResult }</div>} 
         <a className="btn btn-primary pull-right" href="#" onClick={ this.test }>Test</a>
-        <a className="btn btn-primary pull-right" href="#" onClick={ this.save }>Save</a>
       </div>
     );
   }

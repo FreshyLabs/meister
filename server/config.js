@@ -1,5 +1,5 @@
 const dockerHost = (
-  ( process.env.DOCKER_HOST || "tcp://127.0.0.1:2376" )
+  ( process.env.DOCKER_HOST || "tcp://0.0.0.0:80" )
     .match( /^\w+:\/\/([\d\w\.]+):(\d+)$/ ) || []
 )[1];
 
