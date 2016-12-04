@@ -76,7 +76,7 @@ class MountainDeets extends React.Component {
 
   test() {
     const { scraperUrl, scraperFunc } = this.state;
-    this.props.testScraper( scraperUrl, scraperFunc );
+    this.props.testScraper( this.props.mountain.name, scraperUrl, scraperFunc );
   }
 
   save( e ) {
@@ -104,6 +104,7 @@ class MountainDeets extends React.Component {
     const statusOpts = [ 'open', 'closed' ];
 
     const { testResult } = this.props;
+    console.log('TEST RESULT', testResult)
     const { dirty, currentNew, currentBase, currentStatus } = this.state;
 
     return (

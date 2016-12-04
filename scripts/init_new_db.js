@@ -22,14 +22,16 @@ function getAll(){
       var model = {
         name: feature.properties.Name,
         data: {},
+        error: [],
         scraperUrl: scraper.url,
         scraperFunc: scraper.scraper,
+        scraperHeaders: scraper.headers || [],
         feature: {
           properties: feature.properties,
           geometry:feature.geometry
         }
       };
-
+      
       db.Mountain.create( model, function( err, mtn ){
         if (err){
           console.log('didnt insert', m);

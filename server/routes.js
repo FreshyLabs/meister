@@ -70,13 +70,12 @@ apiRouter.route( '/mountains' )
 
 apiRouter.route( '/mountains/scraper' )
   .post( function scraper( req, res ) {
-    Scraper( req.body.url, eval( "(" + req.body.func + ")"), ( err, result ) => {
-      if ( err ) {
-        console.log(err, req.body.url)
-        return res.status( 200 ).send( err );
-      }
-      res.status( 200 ).send( result );
-    } );
+    db.Mountain.findOne( { name: req.body.name } ).exec()
+      .then( doc => {
+        Scraper( doc, req.body.url, eval( "(" + req.body.func + ")") )
+          .then( result => res.status( 200 ).send( result[ 1 ] ) )
+          .catch( err => res.status( 200 ).send( err ) );
+      })
   });
  
 

@@ -22036,10 +22036,10 @@ webpackJsonp([1],[
 	    }
 	  }, {
 	    key: 'testScraper',
-	    value: function testScraper(url, func) {
+	    value: function testScraper(name, url, func) {
 	      var _this5 = this;
 
-	      _actions.testScraper({ url: url, func: func }).then(function (testResult) {
+	      _actions.testScraper({ name: name, url: url, func: func }).then(function (testResult) {
 	        _this5.setState({ testResult: testResult });
 	      });
 	    }
@@ -22235,7 +22235,7 @@ webpackJsonp([1],[
 	      var scraperUrl = _state.scraperUrl;
 	      var scraperFunc = _state.scraperFunc;
 
-	      this.props.testScraper(scraperUrl, scraperFunc);
+	      this.props.testScraper(this.props.mountain.name, scraperUrl, scraperFunc);
 	    }
 	  }, {
 	    key: 'save',
@@ -22263,6 +22263,8 @@ webpackJsonp([1],[
 	      var statusOpts = ['open', 'closed'];
 
 	      var testResult = this.props.testResult;
+
+	      console.log('TEST RESULT', testResult);
 	      var _state2 = this.state;
 	      var dirty = _state2.dirty;
 	      var currentNew = _state2.currentNew;
@@ -22418,6 +22420,9 @@ webpackJsonp([1],[
 	    'open': cStatus === 'open',
 	    'closed': cStatus === 'closed'
 	  });
+
+	  var errors = mtn.errors;
+
 	  if (props.term === '' || mtn.name.toLowerCase().match(props.term.toLowerCase())) {
 	    return _react2.default.createElement(
 	      'li',
@@ -22433,7 +22438,8 @@ webpackJsonp([1],[
 	        { className: 'stats' },
 	        mtn.feature.properties.current_new,
 	        '/',
-	        mtn.feature.properties.current_base
+	        mtn.feature.properties.current_base,
+	        errors && errors.length ? 'error' : ''
 	      )
 	    );
 	  }
@@ -38595,7 +38601,7 @@ webpackJsonp([1],[
 	  function RedBoxError() {
 	    _classCallCheck(this, RedBoxError);
 
-	    return _possibleConstructorReturn(this, Object.getPrototypeOf(RedBoxError).apply(this, arguments));
+	    return _possibleConstructorReturn(this, (RedBoxError.__proto__ || Object.getPrototypeOf(RedBoxError)).apply(this, arguments));
 	  }
 
 	  _createClass(RedBoxError, [{
@@ -38731,7 +38737,7 @@ webpackJsonp([1],[
 	  function RedBox() {
 	    _classCallCheck(this, RedBox);
 
-	    return _possibleConstructorReturn(this, Object.getPrototypeOf(RedBox).apply(this, arguments));
+	    return _possibleConstructorReturn(this, (RedBox.__proto__ || Object.getPrototypeOf(RedBox)).apply(this, arguments));
 	  }
 
 	  _createClass(RedBox, [{
@@ -38886,7 +38892,9 @@ webpackJsonp([1],[
 	      _RewiredData__[variableName] = value;
 	    }
 
-	    return value;
+	    return function () {
+	      _reset__(variableName);
+	    };
 	  }
 	}
 
@@ -39113,7 +39121,9 @@ webpackJsonp([1],[
 	      _RewiredData__[variableName] = value;
 	    }
 
-	    return value;
+	    return function () {
+	      _reset__(variableName);
+	    };
 	  }
 	}
 
@@ -39181,7 +39191,8 @@ webpackJsonp([1],[
 	    zIndex: 9999,
 	    textAlign: 'left',
 	    fontSize: '16px',
-	    lineHeight: 1.2
+	    lineHeight: 1.2,
+	    overflow: 'scroll'
 	  },
 	  message: {
 	    fontWeight: 'bold'

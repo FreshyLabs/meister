@@ -8,13 +8,16 @@ function item( props, mtn, key ) {
     'open': cStatus === 'open',
     'closed': cStatus === 'closed'
   });
+
+  const errors = mtn.errors;
+
   if ( props.term === '' || mtn.name.toLowerCase().match( props.term.toLowerCase() ) ) {
     return <li
       key={key}
       className={ classes }
       onClick={ () => props.change( mtn.name ) }>
         {mtn.name} 
-        <span className={'stats'}>{mtn.feature.properties.current_new}/{mtn.feature.properties.current_base}</span>
+        <span className={'stats'}>{mtn.feature.properties.current_new}/{mtn.feature.properties.current_base}{ errors && errors.length ? 'error': ''}</span>
     </li>
   }
 }

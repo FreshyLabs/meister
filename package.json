@@ -9,6 +9,7 @@
     "aws-sdk": "^2.4.0",
     "babel-regenerator-runtime": "^6.5.0",
     "body-parser": "^1.15.2",
+    "cheerio": "^0.22.0",
     "cookie-parser": "^1.4.3",
     "cookie-session": "^2.0.0-alpha.1",
     "copy-to-clipboard": "^3.0.2",
@@ -42,6 +43,7 @@
     "react-skylight": "^0.4.0",
     "static-expiry": "0.0.11",
     "style-loader": "^0.13.1",
+    "superagent": "^2.3.0",
     "webpack": "^1.13.1"
   },
   "devDependencies": {
