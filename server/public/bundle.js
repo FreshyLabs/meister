@@ -4584,15 +4584,15 @@ webpackJsonp([1],[
 /* 89 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
 	var _default = {
-	  host: 'localhost:1337',
+	  host: process.env.FRESHY_HOST || 'localhost:1337',
 	  mode: ("development") || 'development',
-	  protocol:  false ? 'https://' : 'http://'
+	  protocol:  false ? 'http://' : 'http://'
 	};
 	exports.default = _default;
 	;
@@ -4607,6 +4607,7 @@ webpackJsonp([1],[
 
 	;
 	module.exports = exports['default'];
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(79)))
 
 /***/ },
 /* 90 */
