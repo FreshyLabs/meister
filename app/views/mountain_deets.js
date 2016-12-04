@@ -104,7 +104,6 @@ class MountainDeets extends React.Component {
     const statusOpts = [ 'open', 'closed' ];
 
     const { testResult } = this.props;
-    console.log('TEST RESULT', testResult)
     const { dirty, currentNew, currentBase, currentStatus } = this.state;
 
     return (

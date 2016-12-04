@@ -22263,8 +22263,6 @@ webpackJsonp([1],[
 	      var statusOpts = ['open', 'closed'];
 
 	      var testResult = this.props.testResult;
-
-	      console.log('TEST RESULT', testResult);
 	      var _state2 = this.state;
 	      var dirty = _state2.dirty;
 	      var currentNew = _state2.currentNew;
