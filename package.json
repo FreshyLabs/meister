@@ -82,6 +82,7 @@
     "lint": "eslint --rulesdir eslint_rules/ --fix --cache --quiet --env browser,commonjs ./app && eslint --rulesdir eslint_rules/ --fix --cache --quiet --rule 'no-console: 0' ./server",
     "prepush": "npm run lint",
     "start": "NODE_ENV=development webpack --progress --colors --watch & NODE_ENV=development nodemon server/index.js",
+    "start-prod": "webpack -p && node server/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
