@@ -7,7 +7,7 @@ const config = require( './config' );
 const strategy = new GitHubStrategy({
     clientID: config.GITHUB_CLIENT_ID,
     clientSecret: config.GITHUB_CLIENT_SECRET,
-    callbackURL: 'http://localhost:1337/auth/github/callback'
+    callbackURL: 'http://'+config.host+'/auth/github/callback'
   }, 
 function(accessToken, refreshToken, profile, done) {
   // profile has all the information from the user
