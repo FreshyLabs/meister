@@ -36,7 +36,8 @@ const mtnSchema = mongoose.Schema( {
   feature:      mongoose.Schema.Types.Mixed,
   name:         String,
   scraperUrl:   String,
-  scraperFunc:  Function
+  scraperFunc:  Function,
+  error:        mongoose.Schema.Types.Mixed
 } );
 
 
