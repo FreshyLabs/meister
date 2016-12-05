@@ -2,7 +2,7 @@
 
 var request = require('request'),
   db = require('../server/db'),
-  scrapers = require('../../../freshymap_live/data/scraper_docs');
+  scrapers = require('./scraper_docs');
   
 
 function getAll(){
