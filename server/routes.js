@@ -96,7 +96,7 @@ apiRouter.route( '/mountains/:id' )
           return newMtn;
       })
       .then( mtn => {
-          CronOne( mtn );
+          CronOne( mtn, true );
           res.status( 200 ).send( mtn );
         }, 
         onError( res ) 
