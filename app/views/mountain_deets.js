@@ -52,7 +52,8 @@ class MountainDeets extends React.Component {
     }
   }
 
-  addCam() {
+  addCam( e ) {
+    e.stopPropagation();
     this.setState( { webcams: this.state.webcams.concat(['']), dirty: true } );
   }
 
@@ -74,12 +75,14 @@ class MountainDeets extends React.Component {
     this.setState({ scraperFunc: newCode, dirty: true });
   }
 
-  test() {
+  test( e ) {
+    e.stopPropagation();
     const { scraperUrl, scraperFunc } = this.state;
     this.props.testScraper( this.props.mountain.name, scraperUrl, scraperFunc );
   }
 
   save( e ) {
+    e.stopPropagation();
     const mtn = { 
       ...this.props.mountain,
       scraperUrl: this.state.scraperUrl,
@@ -100,15 +103,18 @@ class MountainDeets extends React.Component {
   }
 
   render() {
-
     const statusOpts = [ 'open', 'closed' ];
 
-    const { testResult } = this.props;
+    const { testResult, mountain } = this.props;
     const { dirty, currentNew, currentBase, currentStatus } = this.state;
 
+    console.log( mountain.feature.properties )
+    
     return (
       <div className="col-xs-8 col-sm-8 col-lg-6 mtn-deets">
-        <h2>{ this.props.mountain.name } <a className="btn btn-primary pull-right" href="#" onClick={ this.save }>{ dirty ? 'Save' : 'Saved' }</a></h2>
+        <h2>{ mountain.name } <a className="btn btn-primary pull-right" href="#" onClick={ this.save }>{ dirty ? 'Save' : 'Saved' }</a></h2>
+
+        <span style={{ fontSize: '10' }}>{'Updated at: ' + mountain.feature.properties.report_time }</span>        
 
         <div className="row">
           <div className="col-xs-3 col-sm-3 col-lg-3">
@@ -146,6 +152,18 @@ class MountainDeets extends React.Component {
         <Codemirror value={this.state.scraperFunc} onChange={this.updateCode} options={{mode: 'javascript'}} style={{height: 300}} />
         { testResult && <div>{ typeof testResult === 'object' ? JSON.stringify( testResult ) : testResult }</div>} 
         <a className="btn btn-primary pull-right" href="#" onClick={ this.test }>Test</a>
+
+        { mountain.error && mountain.error.length &&
+          <div> 
+            <h3>Errors</h3>
+            { mountain.error.map( ( e, i )  => { 
+                if ( e ) {
+                  return <div key={i}>{ JSON.stringify( e ) }</div>
+                }
+              })
+            }
+          </div>  
+        }
       </div>
     );
   }

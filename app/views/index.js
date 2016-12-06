@@ -58,7 +58,9 @@ class Index extends React.Component {
 
   componentDidMount() {
     _actions.fetchMountains().then( mountains => {
-      this.setState( { mountains } );
+      const selected = location.hash.substr(1);
+      const mtn = mountains.find( m => m.name === selected );
+      this.setState( { mountains, selectedMtn: mtn || null } );
     } );
 
     _actions.fetchUser().then( user => {
@@ -72,6 +74,7 @@ class Index extends React.Component {
 
   @autobind
   changeMountain( name ) {
+    location.hash = name;
     _actions.fetchMountain( name )
       .then( mtn => {
         this.setState( { 
@@ -83,7 +86,7 @@ class Index extends React.Component {
 
   @autobind
   updateMtn( name, model ) {
-    this.setState( { dirty: true })
+    this.setState( { dirty: true, selectedMtn: model })
     _actions.updateMountain( name, model )
       .then( () => this.setState( { dirty: false }) );
   }
@@ -110,8 +113,25 @@ class Index extends React.Component {
     return (
       <div>
         <Header { ...props } user={ this.state.user } />
-        <MountainList { ...props } term={ searchTerm } search={ this.search } mountain={ selectedMtn } mountains={ this.state.mountains } change={ this.changeMountain }/>
-        { selectedMtn && <MountainDeets { ...props } dirty={ dirty } save={this.updateMtn } testResult={ testResult } mountain={ selectedMtn } save={ this.updateMtn } testScraper={ this.testScraper } /> }
+        <MountainList 
+          { ...props } 
+          term={ searchTerm } 
+          search={ this.search } 
+          mountain={ selectedMtn } 
+          mountains={ this.state.mountains } 
+          change={ this.changeMountain }
+        />
+        { selectedMtn && 
+          <MountainDeets 
+            { ...props } 
+            dirty={ dirty } 
+            save={this.updateMtn } 
+            testResult={ testResult } 
+            mountain={ selectedMtn } 
+            save={ this.updateMtn } 
+            testScraper={ this.testScraper } 
+          /> 
+        }
       </div>
     );
   }

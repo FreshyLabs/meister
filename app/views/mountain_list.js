@@ -23,6 +23,8 @@ function item( props, mtn, key ) {
 }
 
 function MountainList( props ) {
+  
+  const mountains = props.mountains.sort((a, b) => a.name.localeCompare(b.name));
 
   return (
     <div className="col-xs-4 col-sm-4 col-lg-4 mtn-list">
@@ -34,7 +36,7 @@ function MountainList( props ) {
         placeHolder={ 'Search...' }
       />
       <ul>
-        { props.mountains.map( ( mtn, i ) => {
+        { mountains.map( ( mtn, i ) => {
             return item( props, mtn, i )
           })
         }

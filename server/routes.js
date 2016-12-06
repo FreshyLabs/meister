@@ -9,6 +9,7 @@ const db                  = require( './db' );
 const Users               = require( './users.json' );
 
 const Scraper = require('../lib/scraper');
+const CronOne = require('../lib/cron');
 
 const apiRouter = express.Router();
 const json      = bodyParser.json( { limit: '50mb' } );
@@ -91,9 +92,16 @@ apiRouter.route( '/mountains/:id' )
       .findOne( { name: req.params.id } ).exec()
       .then( mtn => { 
           const newMtn = Object.assign( mtn, req.body );
-          return newMtn.save(); 
+          newMtn.save();
+          return newMtn;
       })
-      .then( onSuccess( res ), onError( res ) );
+      .then( mtn => {
+          CronOne( mtn );
+          res.status( 200 ).send( mtn );
+        }, 
+        onError( res ) 
+      );
+
     res.sendStatus( 200 );
   } )
 

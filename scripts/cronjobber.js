@@ -1,5 +1,5 @@
 const db = require( '../server/db' );
-const Collect = require('./cron');
+const Collect = require('../lib/cron');
 
 function next(){
   Collect( mtns.shift() )
