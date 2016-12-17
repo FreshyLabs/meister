@@ -94,7 +94,7 @@ class Index extends React.Component {
   @autobind
   testScraper( name, url, func ) {
     _actions.testScraper( { name, url, func } ).then( testResult => {
-      this.setState( { testResult })
+      this.setState( { testResult, selectedMtn: { ...this.state.selectedMtn, scraperUrl: url, scraperFunc: func } } );
     });
   }
 

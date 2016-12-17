@@ -38,18 +38,20 @@ class MountainDeets extends React.Component {
   }
 
   _update( props ) {
+    const _state = { ...this.state };
+    _state.scraperUrl = props.mountain.scraperUrl;
+    _state.scraperFunc = props.mountain.scraperFunc;
+
     if ( !props.testResult ) {
       const { properties: data } = props.mountain.feature;
-      this.setState({
-        scraperUrl: props.mountain.scraperUrl,
-        scraperFunc: props.mountain.scraperFunc,
-        webcams: data.webcams,
-        currentNew: data.current_new,
-        currentBase: data.current_base,
-        currentStatus: data.current_status,
-        dirty: props.dirty
-      });
+      _state.webcams = data.webcams;
+      _state.currentNew = data.current_new;
+      _state.currentBase = data.current_base;
+      _state.currentStatus = data.current_status;
+      _state.dirty = false;
     }
+
+    this.setState( { ..._state } );
   }
 
   addCam( e ) {
@@ -98,8 +100,8 @@ class MountainDeets extends React.Component {
         }
       }
     };
-    //console.log(mtn)
     this.props.save( this.props.mountain.name, mtn );
+    this.setState( { dirty: false } );
   }
 
   render() {
@@ -108,8 +110,6 @@ class MountainDeets extends React.Component {
     const { testResult, mountain } = this.props;
     const { dirty, currentNew, currentBase, currentStatus } = this.state;
 
-    console.log( mountain.feature.properties )
-    
     return (
       <div className="col-xs-8 col-sm-8 col-lg-6 mtn-deets">
         <h2>{ mountain.name } <a className="btn btn-primary pull-right" href="#" onClick={ this.save }>{ dirty ? 'Save' : 'Saved' }</a></h2>
