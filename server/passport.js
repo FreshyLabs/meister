@@ -1,5 +1,6 @@
 const passport      = require('passport');
 const GitHubStrategy = require('passport-github').Strategy;
+const ObjectId = require('bson').objectid;
 
 const db     = require( './db' );
 const config = require( './config' );
@@ -12,10 +13,12 @@ const strategy = new GitHubStrategy({
 function(accessToken, refreshToken, profile, done) {
   // profile has all the information from the user
   function createUser() {
-    return db.User.create({
+    const user = db.User.create({
       githubId: profile.id,
+      username: profile.username,
       profile
     });
+    return user;
   }
 
   return db.User.findOne( { githubId: profile.id } )
@@ -25,7 +28,7 @@ function(accessToken, refreshToken, profile, done) {
       } else {
         return user;
       }
-    }, createUser )
+    }, (err) => {console.log('User Error', err)} )
     .then( user => done( null, user ), done );
 });
 

@@ -17,14 +17,14 @@ mongoose.connect( db );
 const userSchema = mongoose.Schema( {
   createdAt:        { type: Date, default: Date.now },
   githubId:         String,
-  profile:          Object,
-  wasNew:           Boolean
+  profile:          mongoose.Schema.Types.Mixed,
+  username: 	    String
 } );
 
-userSchema.pre( 'save', function setWasNew( next ) {
+/*userSchema.pre( 'save', function setWasNew( next ) {
   this.wasNew = this.isNew;
   next();
-} );
+} )*/
 
 
 /**

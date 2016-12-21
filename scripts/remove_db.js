@@ -3,7 +3,8 @@
 var request = require('request'),
   db = require('../server/db');
   
-db.Mountain.find({}).remove().exec()
+db.User.find({}).remove().exec();
+db.User.remove();
 /*  .then( function( docs ) {
     docs.forEach( function(d){
       console.log(d.remove)
