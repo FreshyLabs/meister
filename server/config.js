@@ -8,7 +8,7 @@ module.exports = {
   GITHUB_CLIENT_SECRET: process.env.FRESHY_GH_SECRET,
   GithubCallback:       '/callback',
   auth0Issuer:          'https://timbrio.auth0.com/',
-  database:             process.env.FRESHY_DATABASE || `mongodb://${dockerHost}:27017/freshy2016`,
+  database:             process.env.FRESHY_DATABASE || `mongodb://${dockerHost}:27017/freshy2017`,
   dockerHost,
   host:                 process.env.FRESHY_HOST || 'localhost:1337',
   mode:                 process.env.NODE_ENV || 'development',
